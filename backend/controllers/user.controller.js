@@ -36,7 +36,7 @@ const signin = async (req, res) => {
             if (!isMatch) {
                   return res.status(400).json({ message: "Invalid email or password" })
             }
-            const token = generateToken(existingUser._id)
+            const token = generateToken(existingUser._id, existingUser.isAdmin)
             return res.status(200).json({
                   message: "Logged In Successfully",
                   token: token

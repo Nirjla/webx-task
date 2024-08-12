@@ -20,9 +20,10 @@ const authenticateToken = async (req, res, next) => {
 
             // Verify token and extract payload
             const payload = jwt.verify(jwtToken, SECRET_KEY);
-            req.user = payload.user; // Attach user information to the request object
-            console.log(req.user)
-            console.log("RequestedUserID" + req.user.id)
+            console.log("Payloaddata", payload)
+            req.user = payload; // Attach user information to the request object
+            console.log(req.user.id)
+            // console.log("RequestedUserID" + req.user.id)
             // Proceed to the next middleware or route handler
             next();
       } catch (err) {
