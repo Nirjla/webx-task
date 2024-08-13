@@ -11,6 +11,7 @@ export default function CreateProduct() {
     description: '',
     price: ''
   });
+  console.log("CreateProduct", product)
   const [error, setError] = useState(''); // State for error messages
   const [successMessage, setSuccessMessage] = useState(''); // State for success messages
 
