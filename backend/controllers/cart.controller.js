@@ -95,7 +95,7 @@ const deleteFromCart = async (req, res) => {
                   return res.status(404).json({ message: "Cart not found for this user" });
             }
 
-            // Find and remove the product from the cart's products array
+            // create new array wwith all elements that matched the condition and assigned to cart.products
             cart.products = cart.products.filter(item => item.product.toString() !== productId);
 
             // Save the updated cart

@@ -40,7 +40,6 @@ const getProducts = async (req, res) => {
       }
 }
 
-
 const getProductById = async (req, res) => {
       try {
             const product = await Product.findById(req.params.id)
@@ -54,6 +53,23 @@ const getProductById = async (req, res) => {
       }
 }
 
+const deleteProduct = async (req, res) => {
+      try {
+            const product = await Product.findById(req.params.id);
+            if (!product) {
+                  return res.status(404).json({ message: "Product Not Found" })
+            }
+            await Product.findByIdAndDelete(req.params.id)
+            return res.status(200).json({ message: "Product deleted successfully" });
+      } catch (err) {
+            console.error('Error deleting product:', err);
+            return res.status(500).json({ message: `Error deleting product: ${err.message}` });
+      }
+}
+
+
+
+
 module.exports = {
-      createProduct, getProducts, getProductById
+      createProduct, getProducts, getProductById, deleteProduct
 }

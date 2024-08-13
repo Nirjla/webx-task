@@ -23,7 +23,8 @@ const orderSchema = new mongoose.Schema({
       },
       status: {
             type: String,
-            enum: ['Pending', 'Completed', 'Cancelled']
+            enum: ['Pending', 'Completed', 'Cancelled'],
+            default: 'Pending'
       },
       shippingAddress: {
             city: { type: String, required: true },
