@@ -10,11 +10,12 @@ app.use(express.json({ limit: '10mb' })); // Increase limit as needed
 app.use(express.urlencoded({ limit: '10mb', extended: true })); // Increase limit as needed
 // Configure CORS to allow requests from http://localhost:5173
 const corsOptions = {
-      origin: ['https://webx-task-client.vercel.app', 'https://webx-task-admin.vercel.app/login'],
+      origin: ['https://webx-task-client.vercel.app', 'https://webx-task-admin.vercel.app'],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true
 };
+app.options('*', cors(corsOptions)); // Handle preflight requests for all routes
 app.use(cors(corsOptions));
 app.use('/api', routes)
 connectDB()
