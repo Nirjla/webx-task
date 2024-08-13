@@ -5,6 +5,7 @@ import Products from "./components/features/Products"
 import Login from "./components/pages/Login"
 import Cart from "./components/pages/Cart"
 import Checkout from "./components/pages/Checkout"
+import Register from "./components/pages/Register"
 
 function App() {
   return (
