@@ -16,3 +16,9 @@ app.get('/api', (req, res) => {
 app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`)
 })
+
+
+// Export the function to be used by Vercel
+module.exports = (req, res) => {
+      return require('serverless-http')(app)(req, res);
+  };
