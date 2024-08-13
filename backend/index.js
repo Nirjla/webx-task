@@ -18,7 +18,3 @@ app.listen(PORT, () => {
 })
 
 
-// Export the function to be used by Vercel
-module.exports = (req, res) => {
-      return require('serverless-http')(app)(req, res);
-  };
