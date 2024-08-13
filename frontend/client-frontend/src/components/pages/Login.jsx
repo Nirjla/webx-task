@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../api/authApi';
 import { setCredentials } from '../../slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
       const [login, { isLoading, error }] = useLoginMutation();

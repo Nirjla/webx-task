@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export const authApi = createApi({
-      reducerPath: 'authApi',
+export const checkoutApi = createApi({
+      reducerPath: 'checkoutApi',
       baseQuery: fetchBaseQuery({
             baseUrl: import.meta.env.VITE_API_URL,
             prepareHeaders: (headers, { getState }) => {
@@ -11,17 +11,15 @@ export const authApi = createApi({
                   }
                   return headers;
             },
-      }),
-
-      endpoints: (builder) => ({
-            login: builder.mutation({
-                  query: (credentials) => ({
-                        url: '/admin/signin',
+      }), endpoints: (builder) => ({
+            checkout: builder.mutation({
+                  query: (order) => ({
+                        url: '/checkout',
                         method: 'POST',
-                        body: credentials,
+                        body: order,
                   }),
             }),
       }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useCheckoutMutation } = checkoutApi;

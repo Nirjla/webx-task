@@ -3,10 +3,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 export const productApi = createApi({
       reducerPath: 'productApi',
       baseQuery: fetchBaseQuery({
-            baseUrl: 'https://webx-task-api.vercel.app/api',
+            baseUrl: import.meta.env.VITE_API_URL,
             prepareHeaders: (headers, { getState }) => {
-                  // Get the token from localStorage or wherever you store it
-                  const token = localStorage.getItem('token');
+                  const token = getState().auth.token; // Access token from state
                   if (token) {
                         headers.set('authorization', `Bearer ${token}`);
                   }
