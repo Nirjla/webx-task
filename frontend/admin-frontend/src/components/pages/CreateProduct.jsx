@@ -14,7 +14,6 @@ export default function CreateProduct() {
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
-    console.log("e.target", e.target)
     const { name, value, type, files } = e.target;
     if (type === 'file') {
       setProduct({ ...product, [name]: files[0] });
