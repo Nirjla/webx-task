@@ -45,7 +45,7 @@ const addToCart = async (req, res) => {
 const getCartItems = async (req, res) => {
       try {
             const userId = req.user.id
-            const existingCart = await Cart.findOne({ user: userId })
+            const existingCart = await Cart.findOne({ user: userId }).populate('products.product')
             if (!existingCart) {
                   return res.status(404).json({ message: "No Cart Items found" })
             }
