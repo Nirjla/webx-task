@@ -47,7 +47,7 @@ const Cart = () => {
             <div key={item._id} className="bg-white shadow-md rounded-lg overflow-hidden">
               <div className="p-4 flex items-center">
 
-                <img src={item.product.image} alt="Product" className="w-24 h-24 object-cover" />
+                <img src={item.product.image.url} alt="Product" className="w-24 h-24 object-cover" />
                 <div className="ml-4 flex-1">
                   <h2 className="text-xl font-semibold text-gray-800">{item.name}</h2>
                   <p className="text-gray-600 mt-1">${item.product.price.toFixed(2)}</p>
