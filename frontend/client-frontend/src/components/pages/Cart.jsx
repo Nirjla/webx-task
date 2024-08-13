@@ -12,7 +12,7 @@ const Cart = () => {
   const cartItems = data ? data.products : [];
   console.log("CartItems", cartItems)
   // Calculate the total amount
-  const totalAmount = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const totalAmount = cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
 
   const handleDelete = async (itemId) => {
     try {
@@ -50,7 +50,7 @@ const Cart = () => {
                 <img src="placeholder.jpg" alt="Product" className="w-24 h-24 object-cover" />
                 <div className="ml-4 flex-1">
                   <h2 className="text-xl font-semibold text-gray-800">{item.name}</h2>
-                  <p className="text-gray-600 mt-1">${item.price.toFixed(2)}</p>
+                  <p className="text-gray-600 mt-1">${item.product.price.toFixed(2)}</p>
                   <div className="flex items-center mt-2 space-x-4">
                     <button
                       onClick={() => handleUpdateQuantity(item._id, item.quantity - 1)}
