@@ -1,23 +1,26 @@
-// src/components/CreateProduct.js
 import React, { useState } from 'react';
 import MainLayout from '../../layout/MainLayout';
-import { useCreateProductMutation } from '../../api/productsApi'; // Adjust the import based on your API
+import { useCreateProductMutation } from '../../api/productsApi';
 
 export default function CreateProduct() {
-  const [createProduct] = useCreateProductMutation(); // Mutation hook for creating a product
+  const [createProduct] = useCreateProductMutation();
   const [product, setProduct] = useState({
     name: '',
-    image: '',
+    image: null, // Update the type to null for file uploads
     description: '',
     price: ''
   });
-  console.log("CreateProduct", product)
-  const [error, setError] = useState(''); // State for error messages
-  const [successMessage, setSuccessMessage] = useState(''); // State for success messages
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
+    console.log("e.target", e.target)
+    const { name, value, type, files } = e.target;
+    if (type === 'file') {
+      setProduct({ ...product, [name]: files[0] });
+    } else {
+      setProduct({ ...product, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -25,10 +28,17 @@ export default function CreateProduct() {
     setError('');
     setSuccessMessage('');
 
+    // Create FormData object to handle file upload
+    const formData = new FormData();
+    formData.append('name', product.name);
+    formData.append('image', product.image);
+    formData.append('description', product.description);
+    formData.append('price', product.price);
+
     try {
-      await createProduct(product).unwrap();
+      await createProduct(formData).unwrap();
       setSuccessMessage('Product created successfully!');
-      setProduct({ name: '', image: '', description: '', price: '' }); // Reset form fields
+      setProduct({ name: '', image: null, description: '', price: '' }); // Reset form fields
     } catch (err) {
       console.error("Failed to create product:", err);
       setError('Failed to create product. Please try again.');
@@ -54,12 +64,11 @@ export default function CreateProduct() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image URL</label>
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image</label>
             <input
               id="image"
               name="image"
               type="file"
-              value={product.image.url}
               onChange={handleChange}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
