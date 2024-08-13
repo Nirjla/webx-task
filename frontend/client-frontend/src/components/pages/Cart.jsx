@@ -46,8 +46,8 @@ const Cart = () => {
           {cartItems.map((item) => (
             <div key={item._id} className="bg-white shadow-md rounded-lg overflow-hidden">
               <div className="p-4 flex items-center">
-                {/* You might want to fetch the product details here, e.g., using another API call */}
-                <img src="placeholder.jpg" alt="Product" className="w-24 h-24 object-cover" />
+
+                <img src={item.product.image} alt="Product" className="w-24 h-24 object-cover" />
                 <div className="ml-4 flex-1">
                   <h2 className="text-xl font-semibold text-gray-800">{item.name}</h2>
                   <p className="text-gray-600 mt-1">${item.product.price.toFixed(2)}</p>
@@ -81,7 +81,7 @@ const Cart = () => {
       )}
       {cartItems.length > 0 && (
         <div className="mt-6 text-center">
-          <p className="text-xl font-semibold text-gray-800">Total Amount: ${totalAmount.toFixed(2)}</p>
+          <p className="text-xl font-semibold text-gray-800">Total Amount: Rs{totalAmount.toFixed(2)}</p>
           <button
             onClick={() => navigate('/checkout')}
             className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
