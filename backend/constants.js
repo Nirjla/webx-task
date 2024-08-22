@@ -5,6 +5,7 @@ config()
 
 module.exports = {
       DB_URL: process.env.DB_URL,
+      NODE_ENV:process.env.NODE_ENV,
       PORT: process.env.PORT,
       SECRET_KEY: process.env.SECRET_KEY,
       CLOUDINARY: {
