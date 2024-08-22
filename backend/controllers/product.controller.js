@@ -1,8 +1,20 @@
+const Category = require("../models/Category");
 const Product = require("../models/Product");
+const SubCategory = require("../models/SubCategory");
+const productSchema = require("../validators/productValidator");
 
 const createProduct = async (req, res) => {
       try {
-            const { name, price, description } = req.body;
+            const parsedData = productSchema.parse(req.body)
+            const { name, price, description, categoryId, subcategoryIds } = parsedData;
+            const category = await Category.findById(categoryId)
+            if (!category) {
+                  return res.status(400).json({ message: "Category not found" })
+            }
+            const subcategories = await SubCategory.find({ '_id': { $in: subcategoryIds } })
+            if (subcategories.length !== subcategoryIds.length) {
+                  return res.status(400).json({ message: "One or more categories not found" })
+            }
             const { file } = req; // Access the uploaded file
             console.log("FileData", file)
             let imageData = {};
@@ -14,7 +26,7 @@ const createProduct = async (req, res) => {
             }
 
             const newProduct = new Product({
-                  name, price, description, image: imageData
+                  name, price, description, image: imageData, category: categoryId, subcategories: subcategoryIds
             });
 
             await newProduct.save();
@@ -22,6 +34,12 @@ const createProduct = async (req, res) => {
                   message: "Product created successfully"
             });
       } catch (err) {
+            if (err instanceof z.ZodError) {
+                  return res.status(400).json({
+                        message: "Validation failed",
+                        errors: err.errors
+                  })
+            }
             res.status(500).json({
                   message: 'Error creating product ' + err.message
             });

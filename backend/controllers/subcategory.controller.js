@@ -8,8 +8,18 @@ const createSubCategory = async (req, res) => {
             await subcategory.save()
             return res.status(201).json(subcategory)
       } catch (err) {
-            res.status(400).json({ error: err.errors });
+            res.status(400).json({ error: err.message });
       }
 }
 
-module.exports = { createSubCategory }
+const getSubCategories = async (req, res) => {
+      try {
+            const subcategories = await SubCategory.find().populate('category')
+            return res.status(200).json(subcategories)
+      } catch (err) {
+            res.status(400).json({ error: err.message });
+
+      }
+}
+
+module.exports = { createSubCategory,getSubCategories }

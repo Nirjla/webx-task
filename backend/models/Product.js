@@ -14,7 +14,8 @@ const productSchema = new mongoose.Schema({
                   required: true,
             }
       },
-
+      category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+      subcategories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SubCategory' }]
 }, { timestamps: true })
 
 module.exports = mongoose.model('Product', productSchema)
