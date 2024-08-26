@@ -1,3 +1,4 @@
+const { z } = require("zod");
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 const SubCategory = require("../models/SubCategory");
@@ -7,6 +8,7 @@ const createProduct = async (req, res) => {
       try {
             const parsedData = productSchema.parse(req.body)
             const { name, price, description, categoryId, subcategoryIds } = parsedData;
+            console.log("ParsedDta",parsedData)
             const category = await Category.findById(categoryId)
             if (!category) {
                   return res.status(400).json({ message: "Category not found" })
@@ -48,7 +50,7 @@ const createProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
       try {
-            const products = await Product.find()
+            const products = await Product.find().populate('category').populate('subcategories')
             if (!products) {
                   res.status(404).json({ message: "No Products available" })
             }

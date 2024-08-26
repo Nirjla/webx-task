@@ -96,9 +96,7 @@ const Register = () => {
                               />
                         </div>
 
-                        {formError && <p className="text-red-500 mb-4">{formError}</p>}
-                        {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
-                        {isError && <p className="text-red-500 mb-4">{error?.message}</p>}
+
 
                         <button
                               type="submit"
@@ -107,6 +105,9 @@ const Register = () => {
                         >
                               {isLoading ? 'Registering...' : 'Register'}
                         </button>
+                        {formError && <p className="text-red-500 mb-4">{formError}</p>}
+                        {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
+                        {isError && <p className="text-red-500 mb-4">{error?.message}</p>}
                   </form>
             </div>
       );

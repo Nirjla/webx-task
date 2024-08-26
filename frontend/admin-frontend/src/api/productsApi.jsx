@@ -14,11 +14,27 @@ export const productApi = createApi({
       }),
       endpoints: (builder) => ({
             getProducts: builder.query({
-                  query: () => '/product'
+                  query: () => '/products'
+            }),
+            getCategories: builder.query({ query: () => '/categories' }),
+            createCategory: builder.mutation({
+                  query: (newCategory) => ({
+                        url: '/categories',
+                        method: 'POST',
+                        body: newCategory
+                  })
+            }),
+            getSubCategories: builder.query({ query: () => '/subcategories' }),
+            createSubCategory: builder.mutation({
+                  query: (newSubCategory) => ({
+                        url: '/subcategories',
+                        method: 'POST',
+                        body: newSubCategory
+                  })
             }),
             createProduct: builder.mutation({
                   query: (newProduct) => ({
-                        url: '/product',
+                        url: '/products',
                         method: 'POST',
                         body: newProduct
                   })
@@ -26,4 +42,4 @@ export const productApi = createApi({
       })
 })
 
-export const { useGetProductsQuery, useCreateProductMutation } = productApi
+export const { useGetProductsQuery, useCreateProductMutation, useGetCategoriesQuery, useGetSubCategoriesQuery ,useCreateCategoryMutation,useCreateSubCategoryMutation} = productApi

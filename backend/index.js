@@ -13,7 +13,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true })); // Increase limi
 const isDevelopment =  NODE_ENV === 'development';
 const corsOptions = {
       origin:
-            isDevelopment ? ['http://localhost:5173']:
+            isDevelopment ? ['http://localhost:5173','http://localhost:5174']:
             ['https://webx-task-client.vercel.app', 'https://webx-task-admin.vercel.app'],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],

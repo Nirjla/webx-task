@@ -3,46 +3,64 @@ import React from 'react';
 import { useGetProductsQuery } from '../../api/productsApi';
 import MainLayout from '../../layout/MainLayout';
 import { Link } from 'react-router-dom';
+import PrimaryHeadline from '../common/PrimaryHeadline';
+import TableWrapper from '../common/TableWrapper';
+import TableHead from '../common/TableHead';
+import TableHeadWrapper from '../common/TableHeadWrapper';
+import TableDataWrapper from '../common/TableDataWrapper';
+import TableRowWrapper from '../common/TableRowWrapper';
+import TableData from '../common/TableData';
 
 const Products = () => {
       const { data: products, error, isLoading } = useGetProductsQuery();
-
+      console.log("Productsdata", products)
       if (isLoading) return <p>Loading...</p>;
       if (error) return <p>Error fetching products: {error.message}</p>;
 
       return (
             <MainLayout>
-                  <div className="container mx-auto px-4 py-6">
-                        <div className='flex justify-between flex-wrap '>
-                              <h1 className="text-3xl font-bold mb-4">Product List</h1>
-                              <Link to={'/create-product'} className='hover:underline'>Add New Product</Link>
-                        </div>
-                        <div className="overflow-x-auto">
-                              <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                                    <thead>
-                                          <tr className="bg-gray-100 border-b border-gray-200">
-                                                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Image</th>
-                                                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Product Name</th>
-                                                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Description</th>
-                                                <th className="py-3 px-4 text-left text-sm font-medium text-gray-600">Price</th>
-                                          </tr>
-                                    </thead>
-                                    <tbody>
-                                          {products.map((product) => (
-                                                <tr key={product._id} className="border-b border-gray-200">
-                                                      <td className="py-3 px-4">
-                                                            <img src={product.image.url} alt={product.name} className="w-12 h-12 object-cover rounded-md" />
-                                                      </td>
-                                                      <td className="py-3 px-4 text-gray-700">{product.name}</td>
-                                                      <td className="py-3 px-4 text-gray-600">{product.description}</td>
-                                                      <td className="py-3 px-4 text-gray-900">Rs{product.price.toFixed(2)}</td>
-                                                </tr>
-                                          ))}
-                                    </tbody>
-                              </table>
-                        </div>
+                  <div className='flex justify-between flex-wrap items-center '>
+                        <PrimaryHeadline title={'Products'} />
+                        <Link to={'/create-product'} className='hover:underline'>Add New Product</Link>
                   </div>
-            </MainLayout>
+                  <div className="overflow-x-auto">
+                        <TableWrapper>
+                              <TableHeadWrapper>
+                                    <TableHead title={'Image'} />
+                                    <TableHead title={'Product Name'} />
+                                    <TableHead title={'Category'} />
+                                    <TableHead title={'Sub Category'} />
+                                    <TableHead title={'Description'} />
+                                    <TableHead title={'Price'} />
+                              </TableHeadWrapper>
+                              <TableDataWrapper>
+                                    {products.map((product) => (
+                                          <TableRowWrapper>
+                                                <TableData>
+                                                      <img src={product.image.url} alt={product.name} className="w-12 h-12 object-cover rounded-md" />
+                                                </TableData>
+                                                <TableData>
+                                                      {product.name}
+                                                </TableData>
+                                                <TableData>
+                                                      {product.category?.name}
+                                                </TableData>
+                                                <TableData>
+                                                      {product.subcategories && product.subcategories.map((sub) => (
+                                                            <p> {sub.name}</p>
+
+                                                      ))}</TableData>
+                                                <TableData>
+                                                      {product.description}</TableData>
+                                                <TableData>
+                                                      Rs{product.price.toFixed(2)}
+                                                </TableData>
+                                          </TableRowWrapper>
+                                    ))}
+                              </TableDataWrapper>
+                        </TableWrapper>
+                  </div>
+            </MainLayout >
       );
 };
 

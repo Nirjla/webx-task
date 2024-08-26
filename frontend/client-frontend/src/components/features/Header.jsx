@@ -2,12 +2,16 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../slices/authSlice";
 import { useDispatch } from "react-redux";
+import { useGetCartItemsQuery } from "../../api/cartApi";
 
 export default function Header() {
       const navigate = useNavigate();
       const dispatch = useDispatch();
       const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
+      const { data: cartData = {}, isLoading,refetch } = useGetCartItemsQuery()
+      const cartItems = cartData.products || []
+      const cartItemsCount = cartItems.length
+      console.log("Count", cartItemsCount)
       return (
             <header className="bg-white border-b">
                   <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,7 +73,12 @@ export default function Header() {
                                                                   className="leading-[60px] capitalize font-medium"
                                                                   aria-label="Signup"
                                                             >
-                                                                  Cart
+                                                                  Cart {isLoading ? (
+                                                                        <span className="ml-2 text-gray-500">Loading...</span>
+                                                                  ) : (
+                                                                        <span className="text-black rounded-full  py-1 text-xs">
+                                                                              {cartItemsCount}
+                                                                        </span>)}
                                                             </Link>
                                                       </li>
 

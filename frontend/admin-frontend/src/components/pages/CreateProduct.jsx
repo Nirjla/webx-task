@@ -1,117 +1,152 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainLayout from '../../layout/MainLayout';
-import { useCreateProductMutation } from '../../api/productsApi';
+import { useCreateProductMutation, useGetCategoriesQuery, useGetSubCategoriesQuery } from '../../api/productsApi';
+import InputField from '../common/InputField';
+import TextField from '../common/TextField';
+import PrimaryHeadline from '../common/PrimaryHeadline';
+import PrimaryButton from '../common/PrimaryButton';
+import FormWrapper from '../common/FormWrapper';
+import SelectField from '../common/SelectField';
+import CheckboxField from '../common/CheckboxField';
 
 export default function CreateProduct() {
   const [createProduct] = useCreateProductMutation();
-  const [product, setProduct] = useState({
-    name: '',
-    image: null, // Update the type to null for file uploads
-    description: '',
-    price: ''
-  });
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const { data: categories, error: categoriesError, isLoading: categoriesLoading } = useGetCategoriesQuery();
+  const { data: subcategories, error: subcategoriesError, isLoading: subcategoriesLoading } = useGetSubCategoriesQuery();
+  const [categoryId, setCategoryId] = useState('');
+  const [filteredSubcategories, setFilteredSubcategories] = useState([]);
+  const [product, setProduct] = useState({
+    name: '',
+    image: null,
+    description: '',
+    price: '',
+    categoryId: '',
+    subcategoryIds: []
+  });
+
 
   const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
+    const { name, value, type, files, checked } = e.target;
+
     if (type === 'file') {
       setProduct({ ...product, [name]: files[0] });
+    } else if (type === 'checkbox') {
+      setProduct((prev) => ({
+        ...prev,
+        subcategoryIds: checked
+          ? [...prev.subcategoryIds, value]
+          : prev.subcategoryIds.filter(id => id !== value)
+      }));
     } else {
-      setProduct({ ...product, [name]: value });
+      setProduct((prev) => {
+        const updatedProduct = { ...prev, [name]: value };
+        if (name === 'categoryId') {
+          setCategoryId(value); // Update categoryId state
+        }
+        return updatedProduct;
+      });
     }
   };
+  useEffect(() => {
+    console.log("Selected Category ID:", categoryId);
+    console.log("Subcategories Data:", subcategories);
+
+    if (categoryId && subcategories) {
+      const filtered = subcategories.filter((sub) => sub.category._id === categoryId);
+      console.log("Filtered Subcategories:", filtered);
+      setFilteredSubcategories(filtered);
+    } else {
+      setFilteredSubcategories([]);
+    }
+  }, [categoryId, subcategories]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccessMessage('');
 
-    // Create FormData object to handle file upload
     const formData = new FormData();
     formData.append('name', product.name);
     formData.append('image', product.image);
     formData.append('description', product.description);
     formData.append('price', product.price);
+    formData.append('categoryId', product.categoryId);
+    product.subcategoryIds.forEach((id, index) => formData.append(`subcategoryIds[${index}]`, id));
 
     try {
       await createProduct(formData).unwrap();
       setSuccessMessage('Product created successfully!');
-      setProduct({ name: '', image: null, description: '', price: '' }); // Reset form fields
+      setProduct({
+        name: '',
+        image: null,
+        description: '',
+        price: '',
+        categoryId: '',
+        subcategoryIds: []
+      });
+      setCategoryId('');
     } catch (err) {
       console.error("Failed to create product:", err);
       setError('Failed to create product. Please try again.');
     }
   };
 
+  if (categoriesLoading || subcategoriesLoading) return <p>Loading...</p>;
+  if (categoriesError) return <p>Error fetching categories: {categoriesError.message}</p>;
+  if (subcategoriesError) return <p>Error fetching sub-categories: {subcategoriesError.message}</p>;
+
   return (
     <MainLayout>
-      <div className="container mx-auto px-4 py-6">
-        <h1 className="text-3xl font-bold mb-4">Create New Product</h1>
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Product Name</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              value={product.name}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image</label>
-            <input
-              id="image"
-              name="image"
-              type="file"
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              value={product.description}
-              onChange={handleChange}
-              required
-              rows="4"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
-            <input
-              id="price"
-              name="price"
-              type="number"
-              step="0.01"
-              value={product.price}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
-
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            Create Product
-          </button>
-        </form>
-      </div>
+      <PrimaryHeadline title={'Create A Product'} />
+      <FormWrapper onSubmit={handleSubmit}>
+        <InputField
+          name="name"
+          type="text"
+          title="Product Name"
+          value={product.name}
+          onChange={handleChange}
+        />
+        <SelectField
+          name="categoryId"
+          title="Select a Category"
+          value={product.categoryId}
+          onChange={handleChange}
+          data={categories}
+        />
+        <CheckboxField
+          name="subcategoryIds"
+          title="Select Subcategories"
+          data={filteredSubcategories}
+          value={product.subcategoryIds}
+          onChange={handleChange}
+        />
+        <InputField
+          name="image"
+          type="file"
+          // value={product.image}
+          title="Product Image"
+          onChange={handleChange}
+        />
+        <InputField
+          name="price"
+          type="number"
+          title="Product Price"
+          value={product.price}
+          onChange={handleChange}
+        />
+        <TextField
+          name="description"
+          title="Product Description"
+          value={product.description}
+          onChange={handleChange}
+        />
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
+        <PrimaryButton title="Submit" />
+      </FormWrapper>
     </MainLayout>
   );
 }

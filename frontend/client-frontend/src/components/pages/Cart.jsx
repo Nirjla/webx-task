@@ -53,7 +53,7 @@ const Cart = () => {
                   <p className="text-gray-600 mt-1">${item.product.price.toFixed(2)}</p>
                   <div className="flex items-center mt-2 space-x-4">
                     <button
-                      onClick={() => handleUpdateQuantity(item.product, item.quantity - 1)}
+                      onClick={() => handleUpdateQuantity(item.product._id, item.quantity - 1)}
                       disabled={item.quantity <= 1}
                       className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md hover:bg-gray-300"
                     >
@@ -61,13 +61,13 @@ const Cart = () => {
                     </button>
                     <span className="text-gray-800">{item.quantity}</span>
                     <button
-                      onClick={() => handleUpdateQuantity(item.product, item.quantity + 1)}
+                      onClick={() => handleUpdateQuantity(item.product._id, item.quantity + 1)}
                       className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md hover:bg-gray-300"
                     >
                       +
                     </button>
                     <button
-                      onClick={() => handleDelete(item.product)}
+                      onClick={() => handleDelete(item.product._id)}
                       className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
                     >
                       Remove

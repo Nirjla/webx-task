@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useGetProductsQuery } from '../../api/productApi';
-import { useAddToCartMutation } from '../../api/cartApi';
+import { useAddToCartMutation, useGetCartItemsQuery } from '../../api/cartApi';
 
 const Products = () => {
   const { data: products, error, isLoading } = useGetProductsQuery();
+  const { data, refetch } = useGetCartItemsQuery()
   const [addToCart] = useAddToCartMutation();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Products = () => {
     if (isAuthenticated) {
       try {
         await addToCart({ productId: product._id, quantity: 1 }).unwrap();
+        await refetch()
         alert(`${product.name} added successfully`);
       } catch (error) {
         console.error('Failed to add to cart:', error);
@@ -37,7 +39,7 @@ const Products = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <div key={product._id} className="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src={product.image.url} alt={product.name} className="w-full h-40 object-cover" />
+            <img src={product.image.url} alt={product.name} className="w-full h-40 object-contain" />
             <div className="p-4">
               <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
               <p className="text-gray-600 mt-1">{product.description}</p>
