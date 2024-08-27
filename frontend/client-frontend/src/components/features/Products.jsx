@@ -14,6 +14,8 @@ import SectionWrapper from '../wrapper/SectionWrapper';
 import PrimaryHeadline from '../common/PrimaryHeadline';
 import GridWrapper from '../wrapper/GridWrapper';
 import CardWrapper from '../wrapper/CardWrapper';
+import SecondaryButton from '../common/SecondaryButton';
+import ProductCard from '../common/ProductCard';
 
 const Products = () => {
   const { data: products, error, isLoading } = useGetProductsQuery();
@@ -43,29 +45,12 @@ const Products = () => {
 
   return (
     <>
-    <SectionWrapper>
-      <PrimaryHeadline title={'Recent Products'}/>
-      {message && <p className="text-center text-red-500">{message}</p>}
-      <GridWrapper>
-        {products.map((product) => (
-          <CardWrapper key={product._id}>
-            <Link to={`/products/${product._id}`}>
-              <img src={product.image.url} alt={product.name} className="w-full h-40 object-contain" />
-            </Link>
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-gray-800 line-clamp-1">{product.name}</h3>
-              <p className="text-gray-600 mt-1 line-clamp-2">{product.description}</p>
-              <p className="text-gray-900 font-bold text-sm mt-2">Rs {product.price.toFixed(2)}</p>
-              <button
-                onClick={() => handleAddToCart(product)}
-                className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-              >
-                Add to Cart
-              </button>
-            </div>
-          </CardWrapper>
-        ))}
-      </GridWrapper>
+      <SectionWrapper>
+        <PrimaryHeadline title={'Recent Products'} />
+        {message && <p className="text-center text-red-500">{message}</p>}
+        <GridWrapper>
+          <ProductCard products={products} />
+        </GridWrapper>
       </SectionWrapper>
     </>
   );

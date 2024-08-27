@@ -5,7 +5,6 @@ const router = express.Router()
 
 router.post('/', authenticateToken, createSubCategory)
 router.get('/', getSubCategories)
-router.get('/:id', getSubCategoriesById)
 
 
 module.exports = router

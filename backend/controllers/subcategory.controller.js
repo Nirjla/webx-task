@@ -1,3 +1,4 @@
+const Product = require("../models/Product")
 const SubCategory = require("../models/SubCategory")
 const subcategorySchema = require("../validators/subcategoryValidator")
 
@@ -22,20 +23,5 @@ const getSubCategories = async (req, res) => {
       }
 }
 
-const getSubCategoriesById = async (req, res) => {
-      try {
-            const { id } = req.params
-            console.log("SubId", id)
-            const subcategories = await SubCategory.find({ category: id })
-            console.log(subcategories)
-            if (!subcategories) {
-                  return res.status(400).json({ message: "No subcategories foundu" })
-            }
-            return res.status(200).json(subcategories)
-      } catch (err) {
-            res.status(400).json({ error: err.message });
 
-      }
-}
-
-module.exports = { createSubCategory, getSubCategories, getSubCategoriesById }
+module.exports = { createSubCategory, getSubCategories }

@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useGetCategoriesQuery, useGetSubCategoriesQuery } from "../../api/productApi";
 import PrimaryHeadline from "../common/PrimaryHeadline";
 import CardWrapper from "../wrapper/CardWrapper";
-import ContainerWrapper from "../wrapper/ContainerWrapper";
 import GridWrapper from "../wrapper/GridWrapper";
 import SectionWrapper from "../wrapper/SectionWrapper";
 import Loader from "../common/Loader";
