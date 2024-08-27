@@ -7,6 +7,7 @@ import PrimaryButton from "../common/PrimaryButton";
 import PrimaryHeadline from "../common/PrimaryHeadline";
 import SelectField from "../common/SelectField";
 import TextField from "../common/TextField";
+import toast from "react-hot-toast";
 
 export default function AddSubCategory() {
       const [createSubCategory] = useCreateSubCategoryMutation();
@@ -39,10 +40,10 @@ export default function AddSubCategory() {
                         description: '',
                         category: ''
                   });
-                  setSuccessMessage("SubCategory Added Successfully");
+                  toast.success("SubCategory Added Successfully");
             } catch (e) {
                   console.error("Error adding sub-category:", e.message);
-                  setError('Failed to create sub-category. Please try again.');
+                  toast.error('Failed to create sub-category. Please try again.');
             }
       };
 

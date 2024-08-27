@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGetCartItemsQuery, useDeleteFromCartMutation, useUpdateQuantityMutation } from '../../api/cartApi';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Cart = () => {
   const { data, error, isLoading, refetch } = useGetCartItemsQuery();
@@ -17,7 +18,7 @@ const Cart = () => {
   const handleDelete = async (itemId) => {
     try {
       await deleteFromCart(itemId).unwrap();
-      alert("Item removed successfully");
+      toast.success("Item removed successfully");
       refetch();
     } catch (err) {
       alert("Failed to remove item");

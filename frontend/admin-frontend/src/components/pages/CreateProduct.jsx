@@ -8,9 +8,11 @@ import PrimaryButton from '../common/PrimaryButton';
 import FormWrapper from '../common/FormWrapper';
 import SelectField from '../common/SelectField';
 import CheckboxField from '../common/CheckboxField';
+import Loader from '../common/Loader';
+import toast from 'react-hot-toast';
 
 export default function CreateProduct() {
-  const [createProduct] = useCreateProductMutation();
+  const [createProduct, {isLoading:isSubmitting}] = useCreateProductMutation();
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const { data: categories, error: categoriesError, isLoading: categoriesLoading } = useGetCategoriesQuery();
@@ -78,7 +80,7 @@ export default function CreateProduct() {
 
     try {
       await createProduct(formData).unwrap();
-      setSuccessMessage('Product created successfully!');
+      toast.success('Product created successfully!');
       setProduct({
         name: '',
         image: null,
@@ -90,11 +92,11 @@ export default function CreateProduct() {
       setCategoryId('');
     } catch (err) {
       console.error("Failed to create product:", err);
-      setError('Failed to create product. Please try again.');
+      toast.error('Failed to create product. Please try again.');
     }
   };
 
-  if (categoriesLoading || subcategoriesLoading) return <p>Loading...</p>;
+  if (categoriesLoading || subcategoriesLoading) return <Loader/>;
   if (categoriesError) return <p>Error fetching categories: {categoriesError.message}</p>;
   if (subcategoriesError) return <p>Error fetching sub-categories: {subcategoriesError.message}</p>;
 
@@ -145,7 +147,10 @@ export default function CreateProduct() {
         />
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
-        <PrimaryButton title="Submit" />
+        {
+          isSubmitting ? <Loader /> : <PrimaryButton title="Submit" />
+        }
+
       </FormWrapper>
     </MainLayout>
   );

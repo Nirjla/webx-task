@@ -4,6 +4,16 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useGetProductsQuery } from '../../api/productApi';
 import { useAddToCartMutation, useGetCartItemsQuery } from '../../api/cartApi';
+import Loader from '../common/Loader';
+import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+import ContainerWrapper from '../wrapper/ContainerWrapper';
+import MainLayout from '../../layout/MainLayout';
+import SectionWrapper from '../wrapper/SectionWrapper';
+import PrimaryHeadline from '../common/PrimaryHeadline';
+import GridWrapper from '../wrapper/GridWrapper';
+import CardWrapper from '../wrapper/CardWrapper';
 
 const Products = () => {
   const { data: products, error, isLoading } = useGetProductsQuery();
@@ -18,7 +28,7 @@ const Products = () => {
       try {
         await addToCart({ productId: product._id, quantity: 1 }).unwrap();
         await refetch()
-        alert(`${product.name} added successfully`);
+        toast.success(`${product.name} added successfully`)
       } catch (error) {
         console.error('Failed to add to cart:', error);
         alert('Failed to add item to cart.');
@@ -28,33 +38,36 @@ const Products = () => {
       setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
     }
   };
-
-  if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
+  if (isLoading) return <Loader />;
   if (error) return <p className="text-center text-red-500">Error fetching products: {error.message}</p>;
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <h1 className="text-4xl font-bold mb-6 text-center text-gray-900">Products List</h1>
+    <>
+    <SectionWrapper>
+      <PrimaryHeadline title={'Recent Products'}/>
       {message && <p className="text-center text-red-500">{message}</p>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <GridWrapper>
         {products.map((product) => (
-          <div key={product._id} className="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src={product.image.url} alt={product.name} className="w-full h-40 object-contain" />
+          <CardWrapper key={product._id}>
+            <Link to={`/products/${product._id}`}>
+              <img src={product.image.url} alt={product.name} className="w-full h-40 object-contain" />
+            </Link>
             <div className="p-4">
-              <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
-              <p className="text-gray-600 mt-1">{product.description}</p>
-              <p className="text-gray-900 font-bold mt-2">${product.price.toFixed(2)}</p>
+              <h3 className="text-sm font-semibold text-gray-800 line-clamp-1">{product.name}</h3>
+              <p className="text-gray-600 mt-1 line-clamp-2">{product.description}</p>
+              <p className="text-gray-900 font-bold text-sm mt-2">Rs {product.price.toFixed(2)}</p>
               <button
                 onClick={() => handleAddToCart(product)}
-                className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
               >
                 Add to Cart
               </button>
             </div>
-          </div>
+          </CardWrapper>
         ))}
-      </div>
-    </div>
+      </GridWrapper>
+      </SectionWrapper>
+    </>
   );
 };
 

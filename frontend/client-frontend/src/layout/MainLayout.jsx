@@ -1,10 +1,11 @@
 import Header from "../components/features/Header";
-import Products from "../components/features/Products";
+import ContainerWrapper from "../components/wrapper/ContainerWrapper";
 
 export default function MainLayout({ children }) {
       return (<>
             <Header />
-            <Products />
-
+            <ContainerWrapper>
+                  {children && children}
+            </ContainerWrapper>
       </>)
 }

@@ -6,6 +6,7 @@ import InputField from "../common/InputField";
 import PrimaryButton from "../common/PrimaryButton";
 import PrimaryHeadline from "../common/PrimaryHeadline";
 import TextField from "../common/TextField";
+import toast from "react-hot-toast";
 
 export default function AddCategory() {
       const [createCategory] = useCreateCategoryMutation();
@@ -31,10 +32,10 @@ export default function AddCategory() {
                         name:'',
                         description:''
                   })
-                  setSuccessMessage("Category Added Successfully")
+                  toast.success("Category Added Successfully")
             } catch (e) {
                   console.error("Error adding category:", e.message)
-                  setError('Failed to create category. Please try again.');
+                  toast.error('Failed to create category. Please try again.');
 
             }
       }

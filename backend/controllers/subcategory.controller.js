@@ -22,4 +22,20 @@ const getSubCategories = async (req, res) => {
       }
 }
 
-module.exports = { createSubCategory,getSubCategories }
+const getSubCategoriesById = async (req, res) => {
+      try {
+            const { id } = req.params
+            console.log("SubId", id)
+            const subcategories = await SubCategory.find({ category: id })
+            console.log(subcategories)
+            if (!subcategories) {
+                  return res.status(400).json({ message: "No subcategories foundu" })
+            }
+            return res.status(200).json(subcategories)
+      } catch (err) {
+            res.status(400).json({ error: err.message });
+
+      }
+}
+
+module.exports = { createSubCategory, getSubCategories, getSubCategoriesById }

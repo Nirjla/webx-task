@@ -4,6 +4,6 @@ const authenticateToken = require('../middlewares/authenticateToken.middleware')
 const router = express.Router()
 
 router.post('/', authenticateToken, createCategory)
-router.get('/',authenticateToken,getCategories)
+router.get('/',getCategories)
 
 module.exports = router

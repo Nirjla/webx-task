@@ -6,13 +6,18 @@ import Login from "./components/pages/Login"
 import Cart from "./components/pages/Cart"
 import Checkout from "./components/pages/Checkout"
 import Register from "./components/pages/Register"
+import SingleProduct from "./components/pages/SingleProduct"
+import Home from "./components/pages/Home"
+import SingleCategory from "./components/pages/SingleCategory"
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<MainLayout />} />
+        <Route path='/' element={<Home />} />
         <Route path='/products' element={<Products />} />
+        <Route path='/products/:id' element={<SingleProduct/>}/>
+        <Route path='/categories/:id' element={<SingleCategory/>} />
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Register/>}/>
         <Route path="/cart"element={<Cart/>}/>

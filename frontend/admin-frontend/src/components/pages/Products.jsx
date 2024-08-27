@@ -10,11 +10,12 @@ import TableHeadWrapper from '../common/TableHeadWrapper';
 import TableDataWrapper from '../common/TableDataWrapper';
 import TableRowWrapper from '../common/TableRowWrapper';
 import TableData from '../common/TableData';
+import Loader from '../common/Loader';
 
 const Products = () => {
       const { data: products, error, isLoading } = useGetProductsQuery();
       console.log("Productsdata", products)
-      if (isLoading) return <p>Loading...</p>;
+      if (isLoading) return <Loader/>;
       if (error) return <p>Error fetching products: {error.message}</p>;
 
       return (
